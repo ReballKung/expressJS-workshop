@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>ทดสอบ WebSocket</h1>
+    <input type="text" id="msgBox" placeholder="พิมพ์ข้อความ...">
+    <button onclick="sendMessage()">ส่งข้อความ</button>
+    <ul id="messages"></ul>
+
+    <script src="http://localhost:8001/socket.io/socket.io.js"></script>
+    <script>
+        // 1. สั่งเชื่อมต่อไปที่ Backend ของเรา
+        const socket = io('http://localhost:8001');
+
+        // 2. ถ้าเซิร์ฟเวอร์ส่งข้อความที่ชื่อ 'server_message' มา ให้เอามาแสดงบนหน้าจอ
+        socket.on('server_message', (data) => {
+            const li = document.createElement('li');
+            li.textContent = data;
+            document.getElementById('messages').appendChild(li);
+        });
+
+        // 3. ฟังก์ชันสำหรับกดปุ่มส่งข้อความหาเซิร์ฟเวอร์ในชื่อ 'client_message'
+        function sendMessage() {
+            const input = document.getElementById('msgBox');
+            socket.emit('client_message', input.value);
+            input.value = '';
+        }
+    </script>
+</body>
+</html>>
