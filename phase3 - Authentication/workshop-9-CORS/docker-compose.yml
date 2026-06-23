@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0 # ดึงตัว MySQL เวอร์ชั่น 8.0 มาใช้งาน
+    container_name: my_portfolio_db # ตั้งชื่อ Container ให้จำง่าย
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root # ตั้งรหัสผ่านของ root (ในที่นี้ตั้งว่า root)
+      MYSQL_DATABASE: portfolio_db # สั่งให้สร้าง Database ชื่อนี้ทันทีที่รัน
+    ports:
+      - "3306:3306" # แมปพอร์ต 3306 ของ Container ให้ตรงกับพอร์ต 3306 ของเครื่องเรา
+    volumes:
+      - mysql_data:/var/lib/mysql # เก็บข้อมูลไว้ในเครื่องเรา เผื่อปิด Container ข้อมูลจะได้ไม่หาย
+
+volumes:
+  mysql_data:
