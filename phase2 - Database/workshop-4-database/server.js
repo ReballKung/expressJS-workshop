@@ -1,19 +1,28 @@
+// ============================================================
+// Workshop 4: Database
+// เพิ่มการเชื่อมต่อ MySQL Database เข้ามาใน API
+// ============================================================
+
 const express = require('express');
 const app = express();
 const PORT = 8001
 const profileRoute = require('./routes/profile.route')
+
+// import Route ของ skills ที่ดึงข้อมูลจาก Database
 const skillsRoute = require('./routes/skills.route')
 
-// Middleware 
 app.use((req, res, next) => {
-    console.log('req.method', req.method) // บอกชนิด Method
-    console.log('req.originalUrl', req.originalUrl) // บอก Path ที่ยิงในปัจจุบัน
+    console.log('req.method', req.method)
+    console.log('req.originalUrl', req.originalUrl)
     const dateNow = new Date().toISOString();
     console.log(`[Method : ${req.method}] ถูกเรียกใช้งานที่ [PATH : ${req.originalUrl}] - เวลา [${dateNow}]`);
     next();
 })
 
 app.use('/api/profile', profileRoute);
+
+// ลงทะเบียน skillsRoute ที่ base path /api/skills
+// ทุก Request ที่ขึ้นต้นด้วย /api/skills จะถูกส่งไปที่ skillsRoute
 app.use('/api/skills' , skillsRoute);
 
 app.post('/api/hello', (req , res) => {

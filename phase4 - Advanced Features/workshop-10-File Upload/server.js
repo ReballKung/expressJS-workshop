@@ -1,28 +1,32 @@
+// ============================================================
+// Workshop 10: File Upload
+// เพิ่มการรับ-บริการไฟล์ที่ Upload ขึ้นมา
+// ============================================================
+
 const express = require('express');
 const app = express();
 const PORT = 8001
 
-// lib ด้านความปลอดภัย
 const cors = require('cors');
 const helmet = require('helmet');
 
 const profileRoute = require('./routes/profile.route');
 const skillsRoute = require('./routes/skills.route');
 const authRoute = require('./routes/auth.route');
+
+// import uploadRoute ที่ใช้ multer จัดการไฟล์
 const uploadRoute = require('./routes/upload.route');
 
 app.use(helmet());
-
 app.use(cors({
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Middleware 
 app.use((req, res, next) => {
-    console.log('req.method', req.method); // บอกชนิด Method
-    console.log('req.originalUrl', req.originalUrl); // บอก Path ที่ยิงในปัจจุบัน
+    console.log('req.method', req.method);
+    console.log('req.originalUrl', req.originalUrl);
     const dateNow = new Date().toISOString();
     console.log(`[Method : ${req.method}] ถูกเรียกใช้งานที่ [PATH : ${req.originalUrl}] - เวลา [${dateNow}]`);
     next();
@@ -35,6 +39,10 @@ app.use('/api/skills', skillsRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/upload', uploadRoute);
 
+// ============================================================
+// express.static() เปิดให้ Browser เข้าถึงไฟล์ใน folder 'uploads' ได้โดยตรง
+// เช่น ไฟล์ uploads/photo.jpg จะเข้าถึงได้ที่ http://localhost:8001/uploads/photo.jpg
+// ============================================================
 app.use('/uploads', express.static('uploads'));
 
 app.post('/api/hello', (req , res) => {

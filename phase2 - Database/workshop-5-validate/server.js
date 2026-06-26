@@ -1,18 +1,28 @@
+// ============================================================
+// Workshop 5: Validation
+// เพิ่มการตรวจสอบข้อมูล (Validation) ก่อน Insert ลง Database
+// ============================================================
+
 const express = require('express');
 const app = express();
 const PORT = 8001
 const profileRoute = require('./routes/profile.route')
 const skillsRoute = require('./routes/skills.route')
 
-// Middleware 
 app.use((req, res, next) => {
-    console.log('req.method', req.method) // บอกชนิด Method
-    console.log('req.originalUrl', req.originalUrl) // บอก Path ที่ยิงในปัจจุบัน
+    console.log('req.method', req.method)
+    console.log('req.originalUrl', req.originalUrl)
     const dateNow = new Date().toISOString();
     console.log(`[Method : ${req.method}] ถูกเรียกใช้งานที่ [PATH : ${req.originalUrl}] - เวลา [${dateNow}]`);
     next();
 })
 
+// ============================================================
+// express.json() คือ Built-in Middleware ของ Express
+// ทำหน้าที่แปลง Request Body จาก JSON string → JavaScript object
+// ต้องเพิ่มบรรทัดนี้ก่อน ไม่เช่นนั้น req.body จะเป็น undefined
+// จำเป็นสำหรับ POST / PUT / PATCH ที่ส่งข้อมูลมาใน Body
+// ============================================================
 app.use(express.json());
 
 app.use('/api/profile', profileRoute);
